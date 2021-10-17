@@ -4,10 +4,10 @@ from django.shortcuts import redirect
 def unathenticated_user(view_function):
     def wrapper_function(request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('home')
+            return redirect('login')
         else:
             return view_function(request, *args, **kwargs)
-        return wrapper_function
+    return wrapper_function
 
 
 def allowed_users(allowed_roles=[]):

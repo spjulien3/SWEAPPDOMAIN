@@ -4,7 +4,8 @@ from django.contrib.auth import login, authenticate, logout
 from accounts.forms import RegistrationForm
 from accounts.forms import AccountAuthenticationForm
 from accounts.forms import AccountUpdateForm
-from decorators.decorators import allowed_users
+from decorators.decorators import allowed_users, unathenticated_user
+
 
 def registration_view(request):
     context = {}
@@ -23,6 +24,7 @@ def registration_view(request):
         form = RegistrationForm()
         context['registration_form'] = form
     return render(request,'register.html', context)
+
 
 def home(request):
     context = {}
@@ -53,7 +55,7 @@ def login_view(request):
     context['login_form'] = form
     return render(request, 'login.html',context)
 
-@allowed_users(allowed_roles=['Manager'])
+@allowed_users(allowed_roles=['Manager', 'Admin', 'Accountant'])
 def account_view(request):
 
     if not request.user.is_authenticated:
