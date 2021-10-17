@@ -1,9 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 
 class AccountManager(BaseUserManager):
-	def create_user(self, email, date_joined, last_login, username,date_of_birth, first_name, last_name, password):
+	def create_user(self, email, username,date_of_birth, first_name, last_name, password):
 		if not email:
 			raise ValueError('Users must have an email address')
 		if not username:
@@ -14,7 +14,7 @@ class AccountManager(BaseUserManager):
             date_of_birth=date_of_birth,
             first_name=first_name,
             last_name=last_name,
-            username=first_name+last_name+date_joined.date,
+            username=username,
             password=password
 
 		)
@@ -23,13 +23,13 @@ class AccountManager(BaseUserManager):
 		user.save(using=self._db)
 		return user
 
-	def create_superuser(self, email, date_joined, last_login, date_of_birth, first_name, last_name, username, password):
+	def create_superuser(self, email, date_of_birth, first_name, last_name, username, password):
 		user = self.create_user(
 			email=self.normalize_email(email),
 			password=password,
             first_name=first_name,
             last_name=last_name,
-			username=first_name+last_name+date_joined.date,
+			username=username,
             date_of_birth=date_of_birth,
             
 		)
@@ -40,7 +40,7 @@ class AccountManager(BaseUserManager):
 		return user
 
 
-class Account(AbstractBaseUser):
+class Account(AbstractBaseUser,PermissionsMixin):
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
     username = models.CharField(max_length=30, unique=False)
     first_name = models.CharField(max_length=40)
