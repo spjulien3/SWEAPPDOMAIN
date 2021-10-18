@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     #APPS
-    'accounts.apps.AccountsConfig'
+    'accounts.apps.AccountsConfig',
+    'ledger_account.apps.LedgerAccountConfig'
 ]
 
 MIDDLEWARE = [

@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('accounts.urls')),
     path('home/', home, name='home'),
+    path('', include('ledger_account.urls')),
 
 
 
