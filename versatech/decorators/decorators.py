@@ -1,13 +1,21 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect
+from django.contrib.auth.models import Group
 
 def unathenticated_user(view_function):
     def wrapper_function(request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('login')
+            return redirect('home')
         else:
             return view_function(request, *args, **kwargs)
     return wrapper_function
+
+def authenticated_user(view_function):
+    def wrapper_function(request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return view_function(request, *args, **kwargs)
+        else:
+            return redirect('login')
 
 
 def allowed_users(allowed_roles=[]):
@@ -22,3 +30,4 @@ def allowed_users(allowed_roles=[]):
                 return HttpResponse("ACCESS DENIED")
         return wrapper_function
     return decorator
+

@@ -31,7 +31,7 @@
 
   
   <!-- Custom styles for this template -->
-  <link href="dashboard.css" rel="stylesheet">
+  
 </head>
 <body>
   
@@ -145,126 +145,41 @@
       <table class="table table-striped table-sm">
         <thead>
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">Header</th>
-            <th scope="col">Header</th>
-            <th scope="col">Header</th>
-            <th scope="col">Header</th>
+            <th scope="col">Account name</th>
+            <th scope="col">Account number</th>
+            <th scope="col">Account description</th>
+            <th scope="col">Normal side</th>
+            <th scope="col">Account category</th>
+            <th scope="col">Account subcategory</th>
+            
+            <th scope="col">Debit</th>
+            <th scope="col">Credit</th>
+            <th scope="col">Balance</th>
+            <th scope="col">Date Account Added</th>
+            <th scope="col">Order</th>
+            <th scope="col">Statement</th>
+            <th scope="col">Comment</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1,001</td>
-            <td>random</td>
-            <td>data</td>
-            <td>placeholder</td>
-            <td>text</td>
-          </tr>
-          <tr>
-            <td>1,002</td>
-            <td>placeholder</td>
-            <td>irrelevant</td>
-            <td>visual</td>
-            <td>layout</td>
-          </tr>
-          <tr>
-            <td>1,003</td>
-            <td>data</td>
-            <td>rich</td>
-            <td>dashboard</td>
-            <td>tabular</td>
-          </tr>
-          <tr>
-            <td>1,003</td>
-            <td>information</td>
-            <td>placeholder</td>
-            <td>illustrative</td>
-            <td>data</td>
-          </tr>
-          <tr>
-            <td>1,004</td>
-            <td>text</td>
-            <td>random</td>
-            <td>layout</td>
-            <td>dashboard</td>
-          </tr>
-          <tr>
-            <td>1,005</td>
-            <td>dashboard</td>
-            <td>irrelevant</td>
-            <td>text</td>
-            <td>placeholder</td>
-          </tr>
-          <tr>
-            <td>1,006</td>
-            <td>dashboard</td>
-            <td>illustrative</td>
-            <td>rich</td>
-            <td>data</td>
-          </tr>
-          <tr>
-            <td>1,007</td>
-            <td>placeholder</td>
-            <td>tabular</td>
-            <td>information</td>
-            <td>irrelevant</td>
-          </tr>
-          <tr>
-            <td>1,008</td>
-            <td>random</td>
-            <td>data</td>
-            <td>placeholder</td>
-            <td>text</td>
-          </tr>
-          <tr>
-            <td>1,009</td>
-            <td>placeholder</td>
-            <td>irrelevant</td>
-            <td>visual</td>
-            <td>layout</td>
-          </tr>
-          <tr>
-            <td>1,010</td>
-            <td>data</td>
-            <td>rich</td>
-            <td>dashboard</td>
-            <td>tabular</td>
-          </tr>
-          <tr>
-            <td>1,011</td>
-            <td>information</td>
-            <td>placeholder</td>
-            <td>illustrative</td>
-            <td>data</td>
-          </tr>
-          <tr>
-            <td>1,012</td>
-            <td>text</td>
-            <td>placeholder</td>
-            <td>layout</td>
-            <td>dashboard</td>
-          </tr>
-          <tr>
-            <td>1,013</td>
-            <td>dashboard</td>
-            <td>irrelevant</td>
-            <td>text</td>
-            <td>visual</td>
-          </tr>
-          <tr>
-            <td>1,014</td>
-            <td>dashboard</td>
-            <td>illustrative</td>
-            <td>rich</td>
-            <td>data</td>
-          </tr>
-          <tr>
-            <td>1,015</td>
-            <td>random</td>
-            <td>tabular</td>
-            <td>information</td>
-            <td>text</td>
-          </tr>
+            {% for item in accounts_query %}
+            <tr> 
+                 <td>{{ item.account_name }}</td>
+                 <td>{{ item.account_number }}</td>
+                 <td>{{ item.account_description }}</td>
+                 <td>{{ item.normal_side }}</td>
+                 <td>{{ item.account_category }}</td>
+                 <td>{{ item.account_subcategory }}</td>
+                 <td>{{ item.debit }}</td>
+                 <td>{{ item.credit }}</td>
+                 <td>{{ item.balance }}</td>
+                 <td>{{ item.date_account_added }}</td>
+                 <td>{{ item.order }}</td>
+                 <td>{{ item.statement }}</td>
+                 <td>{{ item.comment }}</td>
+            </tr>
+
+               {% endfor %}
         </tbody>
       </table>
     </div>
