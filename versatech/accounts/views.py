@@ -55,7 +55,7 @@ def login_view(request):
     context['login_form'] = form
     return render(request, 'login.html',context)
 
-@allowed_users(allowed_roles=['Manager', 'Admin', 'Accountant'])
+@allowed_users(allowed_roles=['Manager', 'Administrator', 'Accountant'])
 def account_view(request):
 
     if not request.user.is_authenticated:
@@ -76,7 +76,7 @@ def account_view(request):
     context['account_form'] = form
     return render( request, 'account.html', context)
 
-@allowed_users(allowed_roles=['Manager','Admin'])
+@allowed_users(allowed_roles=['Manager','Administrator'])
 def dashboard_view(request):
     context = {}
     return render(request,'dashboard.html', context )
