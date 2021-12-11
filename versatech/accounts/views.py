@@ -77,6 +77,6 @@ def account_view(request):
     return render( request, 'account.html', context)
 
 @allowed_users(allowed_roles=['Manager','Administrator'])
-def dashboard_view(request):
+def chartofaccounts_view(request):
     context = {}
-    return render(request,'dashboard.html', context )
+    return render(request,'chartofaccounts.html', context )

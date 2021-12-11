@@ -3,41 +3,41 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 
 
 class AccountManager(BaseUserManager):
-	def create_user(self, email, username,date_of_birth, first_name, last_name, password):
-		if not email:
-			raise ValueError('Users must have an email address')
-		if not username:
-			raise ValueError('Users must have a username')
+    def create_user(self, email, username,date_of_birth, first_name, last_name, password):
+        if not email:
+            raise ValueError('Users must have an email address')
+        if not username:
+            raise ValueError('Users must have a username')
 
-		user = self.model(
-			email=self.normalize_email(email),
+        user = self.model(
+            email=self.normalize_email(email),
             date_of_birth=date_of_birth,
             first_name=first_name,
             last_name=last_name,
             username=username,
             password=password
 
-		)
+        )
 
-		user.set_password(password)
-		user.save(using=self._db)
-		return user
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
-	def create_superuser(self, email, date_of_birth, first_name, last_name, username, password):
-		user = self.create_user(
-			email=self.normalize_email(email),
-			password=password,
+    def create_superuser(self, email, date_of_birth, first_name, last_name, username, password):
+        user = self.create_user(
+            email=self.normalize_email(email),
+            password=password,
             first_name=first_name,
             last_name=last_name,
-			username=username,
+            username=username,
             date_of_birth=date_of_birth,
             
-		)
-		user.is_admin = True
-		user.is_staff = True
-		user.is_superuser = True
-		user.save(using=self._db)
-		return user
+        )
+        user.is_admin = True
+        user.is_staff = True
+        user.is_superuser = True
+        user.save(using=self._db)
+        return user
 
 
 class Account(AbstractBaseUser,PermissionsMixin):
@@ -62,12 +62,12 @@ class Account(AbstractBaseUser,PermissionsMixin):
     objects = AccountManager()
 
     def __str__(self):
-	    return self.email
+        return self.email
 
     # For checking permissions. to keep it simple all admin have ALL permissons
     def has_perm(self, perm, obj=None):
-	    return self.is_admin
+        return self.is_admin
 
     # Does this user have permission to view this app? (ALWAYS YES FOR SIMPLICITY)
     def has_module_perms(self, app_label):
-	    return True
+        return True
