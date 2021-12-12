@@ -1,0 +1,8 @@
+1. Journal creation page
+2. completed Journal entry page
+3. account creation page
+4. redo username in account model
+5. style creation pages
+6. add approval/ rejectiont to Journal
+7. add links to account number, username, and account name
+8. add link to post reference number
