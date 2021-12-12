@@ -43,62 +43,44 @@
 <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
 <div class="navbar-nav">
   <div class="nav-item text-nowrap">
-    <a class="nav-link px-3" href="#">Sign out</a>
+    <!-- <a class="nav-link px-3" href="#">Sign out</a> -->
   </div>
 </div>
 </header>
 
 <div class="container-fluid">
-<div class="row">
-  <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-    <div class="position-sticky pt-3">
-      <ul class="nav flex-column">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">
-            <span data-feather="home"></span>
-            Chart Of Accounts
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            <span data-feather="file"></span>
-            Orders
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            <span data-feather="shopping-cart"></span>
-            Products
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            <span data-feather="users"></span>
-            Customers
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            <span data-feather="bar-chart-2"></span>
-            Reports
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            <span data-feather="layers"></span>
-            Integrations
-          </a>
-        </li>
-      </ul>
+  <div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar fill">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">
+              <span data-feather="home"></span>
+              Chart Of Accounts
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'journals' %}">
+              <span data-feather="file"></span>
+              Journals
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="shopping-cart"></span>
+              Reports
+            </a>
+          </li>
+        </ul>
 
       <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-        <span>Saved reports</span>
+        <!-- <span>Saved reports</span>
         <a class="link-secondary" href="#" aria-label="Add a new report">
           <span data-feather="plus-circle"></span>
-        </a>
+        </a> -->
       </h6>
       <ul class="nav flex-column mb-2">
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="#">
             <span data-feather="file-text"></span>
             Current month
@@ -121,7 +103,7 @@
             <span data-feather="file-text"></span>
             Year-end sale
           </a>
-        </li>
+        </li> -->
       </ul>
     </div>
   </nav>

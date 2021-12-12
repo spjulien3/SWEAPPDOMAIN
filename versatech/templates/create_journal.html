@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<form action="" method="POST">
+{% csrf_token %}
+
+{% for field in journal_form %}
+
+    {{ field }}
+
+
+{% endfor %}
+<input type="submit" name="submit">
+</form>
+
+
+{% endblock content %}

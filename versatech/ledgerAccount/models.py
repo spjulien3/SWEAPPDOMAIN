@@ -4,15 +4,17 @@ from django.db import models
 from django.db.models import Sum
 from django.db.models.fields.related import ForeignKey
 from django.dispatch import receiver
-from django.db.models.signals import pre_save
-from django.db.models.deletion import PROTECT
+from django.db.models.signals import pre_save, post_save
+from django.db.models.deletion import CASCADE, PROTECT
 from django.db.models.enums import Choices
 from djmoney.models.fields import MoneyField
+from datetime import datetime as dt
+from django.contrib.auth import get_user_model
 import djmoney.money
 import uuid
 
 NORMAL_SIDE_CHOICES = (
-    ("RIGHT","RIGHT"),("LEFT","LEFT"),
+    ("RIGHT","RIGHT"),("LEFT","LEFT"),("BALANCED","BALANCED")
 )
 
 ACCOUNT_CATEGORY_CHOICES = (
@@ -22,11 +24,10 @@ ACCOUNT_CATEGORY_CHOICES = (
 )
 
 ACCOUNT_SUBCATEGORY_CHOICES = (
-    ("CURRRENT ASSETS","CURRRENT ASSETS"), ("FIXED ASSETS","FIXED ASSETS"), 
-    ("LONG TERM ASSETS","LONG TERM ASSETS"), ("ACCOUNTS RECIEVABLE","ACCOUNTS RECIEVABLE"),
-    ("CURRENT LIABILITIES","CURRENT LIABILITIES"), ("PAYROLL LIABILITIES","PAYROLL LIABILITIES"),
-    ("LONG TERM LIABILITIES","LONG TERM LIABILITIES"), ("NOTES PAYABLE","NOTES PAYABLE"),
-    ("ACCRUED EXPENSES","ACCRUED EXPENSES"), ("DEFFERED REVENUE","DEFFERED REVENUE"),
+    ("CURRRENT","CURRRENT"), ("FIXED","FIXED"), 
+    ("LONG TERM","LONG TERM"), ("ACCOUNTS RECIEVABLE","ACCOUNTS RECIEVABLE"),
+    ("NOTES PAYABLE","NOTES PAYABLE"),
+    ("ACCRUED","ACCRUED"), ("DEFFERED REVENUE","DEFFERED REVENUE"),
     ("COMMON STOCK","COMMON STOCK"), ("PREFERRED STOCK","PREFERRED STOCK"),
     ("RETAINED EARNINGS","RETAINED EARNINGS"), ("DIVIDENDS","DIVIDENDS"),
     ("TREASURY STOCK","TREASURY STOCK"),
@@ -35,60 +36,109 @@ ACCOUNT_SUBCATEGORY_CHOICES = (
 
 # Create your models here.
 class ledgerAccount(models.Model):
-    account_number = models.CharField(max_length=3,default=0)
+    account_number = models.IntegerField(max_length=3,default=0, primary_key=True)
     account_name = models.CharField(max_length=50)
     account_description = models.CharField(max_length=100, blank=True )
-    normal_side = models.CharField(max_length=5, choices=NORMAL_SIDE_CHOICES)
+    normal_side = models.CharField(max_length=10, choices=NORMAL_SIDE_CHOICES, blank=True)
     account_category =  models.CharField(max_length=100, choices=ACCOUNT_CATEGORY_CHOICES)
     account_subcategory = models.CharField(max_length=100, choices=ACCOUNT_SUBCATEGORY_CHOICES, blank=True)
     debit = MoneyField(max_digits=14, decimal_places=2, default_currency='USD', blank=True,default=djmoney.money.Money(0,'USD'))
     credit = MoneyField(max_digits=14, decimal_places=2, default_currency='USD', blank=True,default=djmoney.money.Money(0,'USD'))
     balance = MoneyField(max_digits=14, decimal_places=2, default_currency='USD', blank=True,default=djmoney.money.Money(0,'USD'))
-    date_account_added = models.DateTimeField(auto_now_add=True)
+    date_account_added = models.DateField(default=dt.now)
     statement = models.CharField(max_length=100)
     comment = models.CharField(max_length=200)
-    createdby = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=PROTECT)
+    createdby = models.ForeignKey(get_user_model(), on_delete=PROTECT)
     is_approved =  models.BooleanField(default=False)
 
     def __str__(self):
         return self.account_name
 
 class Journal(models.Model):
+     journal_name = models.CharField(max_length=50)
+     journal_balance = MoneyField(max_digits=14, decimal_places=2, default_currency='USD', blank=True, default=djmoney.money.Money(0,'USD'))
+
     
+
+class JournalEntry(models.Model):
+
+    journal = models.ForeignKey(Journal, on_delete=CASCADE)
+    date = models.DateField(default=dt.now)
     account_name = models.ForeignKey(ledgerAccount, on_delete=PROTECT)
     post_reference = models.AutoField(primary_key=True)
+    normal_side = models.CharField(max_length=10, choices=NORMAL_SIDE_CHOICES)
     debit = MoneyField(max_digits=14, decimal_places=2, default_currency='USD', blank=True,default=djmoney.money.Money(0,'USD'))
     credit = MoneyField(max_digits=14, decimal_places=2, default_currency='USD', blank=True,default=djmoney.money.Money(0,'USD'))
     balance = MoneyField(max_digits=14, decimal_places=2, default_currency='USD', blank=True, default=djmoney.money.Money(0,'USD'))
     is_approved = models.BooleanField(default=False)
+    is_pending = models.BooleanField(default=True)
+    reason = models.CharField(max_length=100, blank=True)
 
-@receiver(pre_save, sender=Journal)
-def journal_presave( sender, instance, **kwargs):
-    query = Journal.objects.all()
-    journal_balance = djmoney.money.Money(0,'USD')
+
+@receiver(pre_save, sender=JournalEntry)
+def journal_entry_presave( sender, instance, **kwargs):
+    query = JournalEntry.objects.all()
+    balance = djmoney.money.Money(0,'USD')
     max = djmoney.money.Money(0,'USD')
-    print(journal_balance)
+    print(balance)
     for index in query:
         if max < index.balance:
             max = index.balance
-            journal_balance = index.balance
+            balance = index.balance
     if (instance.debit > djmoney.money.Money(0,'USD')):
-        instance.balance = journal_balance + instance.debit
+        instance.balance = balance + instance.debit
     if (instance.credit > djmoney.money.Money(0,'USD')):
-        instance.balance = journal_balance - instance.credit
+        instance.balance = balance - instance.credit
+    
+    if(instance.debit > instance.credit):
+        instance.normal_side = "LEFT"
+    if(instance.credit > instance.Debit):
+        instance.normal_side = "RIGHT"
 
 
 @receiver(pre_save, sender=ledgerAccount)
 def balance_update( sender, instance, **kwargs):
-    query = ledgerAccount.objects.all()
+    query = JournalEntry.objects.all()
     balance_sum = djmoney.money.Money(0,'USD')
     max = djmoney.money.Money(0,'USD')
     print(balance_sum)
+    
     for index in query:
         if max < index.balance:
             max = index.balance
             balance_sum = index.balance
+    instance.balance = balance_sum
     if (instance.debit > djmoney.money.Money(0,'USD')):
         instance.balance = balance_sum + instance.debit
     if (instance.credit > djmoney.money.Money(0,'USD')):
         instance.balance = balance_sum - instance.credit
+
+    if(instance.balance > djmoney.money.Money(0,'USD')):
+        instance.normal_side = "LEFT"
+    if(instance.balance > djmoney.money.Money(0,'USD')):
+        instance.normal_side = "RIGHT"
+    if(instance.balance == djmoney.money.Money(0,'USD')):
+        instance.normal_side = "BALANCED"
+
+# @receiver(post_save, sender=JournalEntry)
+# def journal_entry_balance_update(sender, instance, **kwargs):
+#     account = instance.ledgerAccount_set.all()
+#     query = instance.objects.all()
+#     balance_sum = djmoney.money.Money(0,'USD')
+#     max = djmoney.money.Money(0,'USD')
+#     print(balance_sum)
+#     for index in query:
+#         if max < index.balance:
+#             max = index.balance
+#             balance_sum = index.balance
+    
+
+#     if (instance.debit > djmoney.money.Money(0,'USD')):
+#         instance.balance = balance_sum + instance.debit
+#     if (instance.credit > djmoney.money.Money(0,'USD')):
+#         instance.balance = balance_sum - instance.credit
+
+#     instance.balance = balance_sum
+#     account.balance = balance_sum
+#     account.save()
+#     print(account.balance)
