@@ -1,4 +1,8 @@
 from django.db import models
+from django.dispatch import receiver
+from datetime import datetime as dt
+import datetime
+from django.db.models.signals import pre_save, post_save
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 
@@ -42,7 +46,7 @@ class AccountManager(BaseUserManager):
 
 class Account(AbstractBaseUser,PermissionsMixin):
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
-    username = models.CharField(max_length=30, unique=False)
+    username = models.CharField(max_length=30, unique=True)
     first_name = models.CharField(max_length=40)
     last_name = models.CharField(max_length=40)
     date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
@@ -56,8 +60,8 @@ class Account(AbstractBaseUser,PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     s_superuser = models.BooleanField(default=False)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'date_of_birth', 'first_name', 'last_name']
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = [ 'date_of_birth', 'first_name', 'last_name']
 
     objects = AccountManager()
 
@@ -71,3 +75,8 @@ class Account(AbstractBaseUser,PermissionsMixin):
     # Does this user have permission to view this app? (ALWAYS YES FOR SIMPLICITY)
     def has_module_perms(self, app_label):
         return True
+
+@receiver(pre_save, sender=Account)
+def account_pre_save(sender, instance, **kwargs):
+    created_date =dt.today().strftime('%m%d')
+    instance.username = instance.first_name[0] + instance.last_name + created_date

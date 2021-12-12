@@ -13,17 +13,18 @@ class RegistrationForm(UserCreationForm):
         fields = ("email","first_name", "last_name","date_of_birth","password1","password2")
 
 class AccountAuthenticationForm(forms.ModelForm):
+    username = forms.CharField(label="username")
     password = forms.CharField(label="Password", widget=forms.PasswordInput)
 
     class Meta:
         model = Account
-        fields = ('email','password')
+        fields = ('username','password')
     
     def clean(self):
         if self.is_valid():
-            email = self.cleaned_data['email']
+            username = self.cleaned_data['username']
             password = self.cleaned_data['password']
-            if not authenticate(email=email, password=password):
+            if not authenticate(username=username, password=password):
                 raise forms.ValidationError("Invalid Login")
 
 class AccountUpdateForm(forms.ModelForm):

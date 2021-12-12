@@ -1,10 +1,12 @@
 from django.contrib import auth
+from django.db.models import query
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from accounts.forms import RegistrationForm
 from accounts.forms import AccountAuthenticationForm
 from accounts.forms import AccountUpdateForm
 from decorators.decorators import allowed_users, unathenticated_user
+from .models import Account
 
 
 def registration_view(request):
@@ -17,7 +19,6 @@ def registration_view(request):
             raw_password = form.cleaned_data.get('password1')
             account_auth = authenticate(email=email,password=raw_password)
             login(request,account_auth)
-            print(dict(request.POST.items()))
             return redirect('home')
         else:
             context['registration_form'] = form
@@ -44,9 +45,9 @@ def login_view(request):
     if request.POST:
         form = AccountAuthenticationForm(request.POST)
         if form.is_valid():
-            email = request.POST['email']
+            username = request.POST['username']
             password = request.POST['password']
-            user = authenticate(email=email,password=password)
+            user = authenticate(username=username,password=password)
 
             if user:
                 login(request,user)
@@ -77,7 +78,10 @@ def account_view(request):
     context['account_form'] = form
     return render( request, 'account.html', context)
 
-@allowed_users(allowed_roles=['Manager','Administrator'])
-def chartofaccounts_view(request):
+# @allowed_users['Manager', 'Administrator', 'Accountant']
+def account_list_view (request):
     context = {}
-    return render(request,'chartofaccounts.html', context )
+    query = Account.objects.all()
+
+    context ['accounts'] = query
+    return render(request, "account_list.html", context)
