@@ -7,6 +7,7 @@ from accounts.forms import AccountAuthenticationForm
 from accounts.forms import AccountUpdateForm
 from decorators.decorators import allowed_users, unathenticated_user
 from .models import Account
+from django.core.mail import send_mail
 
 
 def registration_view(request):
@@ -85,3 +86,12 @@ def account_list_view (request):
 
     context ['accounts'] = query
     return render(request, "account_list.html", context)
+
+def index(request):
+    send_mail('Hello from VersaTech', 
+    'Hello there. This is from VersaTech.', 
+    'myversatech@gmail.com', 
+    ['marcusimomio@gmail.com'], 
+    fail_silently=False)
+
+    return render(request, 'registration/password_reset_done.html')

@@ -41,10 +41,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'crispy_forms',
+    'admin_email_sender',
+    'event_logging',
 
     #APPS
     'accounts.apps.AccountsConfig',
     'ledgerAccount.apps.LedgeraccountConfig'
+
 ]
 
 MIDDLEWARE = [
@@ -114,6 +118,19 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#EMAIL
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'myversatech@gmail.com'
+EMAIL_HOST_PASSWORD= 'ulpiderewuatbptu'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+# 'vvsjsloyujcpcplb'
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -127,6 +144,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+SIMPLE_MAIL_USE_MODELTRANSALTION = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -135,9 +153,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'media'),
 ]
 STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
+# MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_cdn')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media_cdn')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media_cdn')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

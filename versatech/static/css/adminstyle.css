@@ -1,0 +1,92 @@
+:root {
+    --primary: #f498c5;
+    --secondary: #417690;
+    --accent: #f5dd5d;
+    --primary-fg: #fff;
+    --body-fg: #333;
+    --body-bg: #fff;
+    --body-quiet-color: #666;
+    --body-loud-color: #000;
+    --header-color: #ffc;
+    --header-branding-color: var(--accent);
+    --header-bg: var(--secondary);
+    --header-link-color: var(--primary-fg);
+    --breadcrumbs-fg: white;
+    --breadcrumbs-link-fg: var(--body-bg);
+    --breadcrumbs-bg: var(--primary);
+    --link-fg: #447e9b;
+    --link-hover-color: #036;
+    --link-selected-fg: #5b80b2;
+    --hairline-color: #e8e8e8;
+    --border-color: #ccc;
+    --error-fg: #ba2121;
+    --message-success-bg: #dfd;
+    --message-warning-bg: #ffc;
+    --message-error-bg: #ffefef;
+    --darkened-bg: #f8f8f8;
+    --selected-bg: #e4e4e4;
+    --selected-row: #fcc9e1;
+    --button-fg: #fff;
+    --button-bg: #f498c5;
+    --button-hover-bg: #e1297c;
+    --default-button-bg: #e1297c;
+    --default-button-hover-bg: #f498c5;
+    --close-button-bg: #888;
+    --close-button-hover-bg: #747474;
+    --delete-button-bg: #e1297c;
+    --delete-button-hover-bg: #f498c5;
+    --object-tools-fg: var(--button-fg);
+    --object-tools-bg: var(--close-button-bg);
+    --object-tools-hover-bg: var(--close-button-hover-bg);
+}
+
+#header {
+    background: black;
+    color: #f498c5;
+}
+
+#branding h1 {
+    padding: 0;
+    margin: 0 20px 0 0;
+    font-weight: 300;
+    font-size: 24px;
+    color: #f498c5;
+}
+
+.module h2, .module caption, .inline-group h2 {
+    margin: 0;
+    padding: 8px;
+    font-weight: 400;
+    font-size: 13px;
+    text-align: left;
+    background: black;
+    color: var(--header-link-color);
+}
+
+div.breadcrumbs {
+    background: #f498c5;
+    padding: 10px 40px;
+    border: none;
+    color: var(--breadcrumbs-fg);
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+a:link, a:visited {
+    color: #f498c5;
+    text-decoration: none;
+    transition: color 0.15s, background 0.15s;
+}
+
+#nav-sidebar .current-model:active {
+    background: #fcc9e1;
+}
+
+#datetimepicker1 {
+    width: 250px;
+    margin-left: 42px;
+}
+
+div.calendar {
+    background-color: black;
+}
