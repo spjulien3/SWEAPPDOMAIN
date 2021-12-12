@@ -22,10 +22,10 @@ def journals_view(request):
     context [ 'zero'] = djmoney.money.Money(0,'USD')
     return render (request, 'journals.html', context)
 
-def create_journal_entry_view(request, pk):
+def create_journal_entry_view(request):
     context = {}
     journal_entry = JournalEntry
-    journal = Journal.objects.get(id=pk)
+    journal = Journal.objects.all()
     form = JournalEntryForm()
     if request.method == 'POST':
         
@@ -38,10 +38,10 @@ def create_journal_entry_view(request, pk):
     context['journal']= journal
     return render(request, 'create_journal_entry.html', context)
 
-def create_journal_view(request, pk):
+def create_journal_view(request):
     context = {}
     form = JournalForm()
-    journal = Journal.objects.get(id=pk)
+    journal = Journal.objects.all()
     if request.method == 'POST':
         form = JournalForm(request.POST)
         if form.is_valid():
@@ -66,3 +66,4 @@ def create_ledger_account_view(request):
     context ['ledger_account'] = model
     context ['ledger_account_form'] = form
     return render(request, 'create_ledger_account.html', context)
+

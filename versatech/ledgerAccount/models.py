@@ -92,7 +92,7 @@ def journal_entry_presave( sender, instance, **kwargs):
     
     if(instance.debit > instance.credit):
         instance.normal_side = "LEFT"
-    if(instance.credit > instance.Debit):
+    if(instance.credit > instance.debit):
         instance.normal_side = "RIGHT"
 
 
