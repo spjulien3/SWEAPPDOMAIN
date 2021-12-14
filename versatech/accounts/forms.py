@@ -9,7 +9,7 @@ class RegistrationForm(UserCreationForm):
 
     email = forms.EmailField(max_length=60, help_text="Required. Add a valid email address.")
     date_of_birth = forms.DateField(widget=DateInput(attrs={'type': 'date'}))
-    username = forms.CharField(widget=forms.HiddenInput, initial="123")
+    username = forms.CharField(widget=forms.HiddenInput, initial="123", empty_value="temp")
     class Meta:
         model = Account
         fields = ("email", "username","first_name", "last_name","date_of_birth","password1","password2")

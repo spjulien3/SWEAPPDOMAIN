@@ -24,6 +24,7 @@ class ledgerAccountForm(forms.ModelForm):
         fields = (
             "account_number", "account_name",
             "account_description", "account_category",
+            "account_subcategory",
             "date_account_added", "statement",
             "comment", "createdby", 
         

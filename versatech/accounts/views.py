@@ -15,10 +15,11 @@ def registration_view(request):
     if request.POST:
         form = RegistrationForm(request.POST)
         if form.is_valid():
+            # form.fields ['username']. = "temp"
             user = form.save()
             # email = form.cleaned_data.get('email')
             # raw_password = form.cleaned_data.get('password1')
-            username = form.cleaned_data.get('username')
+            # username = form.cleaned_data.get('username')
             # account_auth = authenticate(username=username,password=raw_password)
             login(request,user)
             return redirect('home')
