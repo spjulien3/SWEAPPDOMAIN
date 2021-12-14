@@ -2,17 +2,22 @@
 
 
 {% block content %}
+
+
+<center>
+    <div class="container">
 <form action="" method="POST">
 {% csrf_token %}
 
 {% for field in ledger_account_form %}
 
-    {{ field }}
+    <div>{{field.label}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ field }}</div>
 
 
 {% endfor %}
 <input type="submit" name="submit">
 </form>
-
+</div>
+</center>
 
 {% endblock content %}

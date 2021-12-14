@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'crispy_forms',
     'admin_email_sender',
-    'event_logging',
+    # 'templatetags',
 
     #APPS
     'accounts.apps.AccountsConfig',
@@ -75,6 +75,10 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries':{
+            'custom_tags': 'versatech.templatetags.custom_tags',
+            
+            }
         },
     },
 ]
@@ -150,7 +154,7 @@ SIMPLE_MAIL_USE_MODELTRANSALTION = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
-    os.path.join(BASE_DIR, 'media'),
+    # os.path.join(BASE_DIR, 'media'),
 ]
 STATIC_URL = '/static/'
 # MEDIA_URL = '/media/'

@@ -2,17 +2,18 @@
 
 
 {% block content %}
+<center>
+<div class="container">
 <form action="" method="POST">
 {% csrf_token %}
 
 {% for field in journal_entry_form %}
-
-    {{ field }}
+    <div>{{field.label}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ field }}</div>
 
 
 {% endfor %}
-<input type="submit" name="submit">
+<input type="submit" name="submit" value="Submit Journal Entry">
 </form>
-
-
+</center>
+</div>
 {% endblock content %}

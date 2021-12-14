@@ -15,11 +15,12 @@ def registration_view(request):
     if request.POST:
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            form.save()
-            email = form.cleaned_data.get('email')
-            raw_password = form.cleaned_data.get('password1')
-            account_auth = authenticate(email=email,password=raw_password)
-            login(request,account_auth)
+            user = form.save()
+            # email = form.cleaned_data.get('email')
+            # raw_password = form.cleaned_data.get('password1')
+            username = form.cleaned_data.get('username')
+            # account_auth = authenticate(username=username,password=raw_password)
+            login(request,user)
             return redirect('home')
         else:
             context['registration_form'] = form
@@ -58,7 +59,7 @@ def login_view(request):
     context['login_form'] = form
     return render(request, 'login.html',context)
 
-@allowed_users(allowed_roles=['Manager', 'Administrator', 'Accountant'])
+@allowed_users(allowed_roles=['is_manager', 'is_admin', 'is_accountant'])
 def account_view(request):
 
     if not request.user.is_authenticated:
@@ -79,7 +80,7 @@ def account_view(request):
     context['account_form'] = form
     return render( request, 'account.html', context)
 
-# @allowed_users['Manager', 'Administrator', 'Accountant']
+# @allowed_users['is_manager', 'is_admin', 'is_accountant']
 def account_list_view (request):
     context = {}
     query = Account.objects.all()

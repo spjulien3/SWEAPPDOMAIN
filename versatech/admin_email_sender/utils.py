@@ -30,7 +30,6 @@ class EmailThread(threading.Thread):
 
 def replace_text(text, user):
     text = text.replace('@username', user.username)
-    text = text.replace('@fullName', user.get_full_name())
     text = text.replace('@firstName', user.first_name)
     text = text.replace('@lastName', user.last_name)
 

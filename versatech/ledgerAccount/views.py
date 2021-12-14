@@ -2,8 +2,8 @@ from decimal import Context
 import djmoney
 from django.db.models import query
 from django.shortcuts import redirect, render
-from .forms import JournalEntryForm, JournalForm, ledgerAccountForm
-from ledgerAccount.models import ledgerAccount, Journal, JournalEntry
+from .forms import JournalEntryForm, ledgerAccountForm
+from ledgerAccount.models import ledgerAccount, JournalEntry
 
 # Create your views here.
 def chartofaccounts_view(request):
@@ -25,7 +25,6 @@ def journals_view(request):
 def create_journal_entry_view(request):
     context = {}
     journal_entry = JournalEntry
-    journal = Journal.objects.all()
     form = JournalEntryForm()
     if request.method == 'POST':
         
@@ -35,21 +34,20 @@ def create_journal_entry_view(request):
             return redirect('journals')
     context['journal_entry_form'] = form
     context['journal_entry'] = journal_entry
-    context['journal']= journal
     return render(request, 'create_journal_entry.html', context)
 
-def create_journal_view(request):
-    context = {}
-    form = JournalForm()
-    journal = Journal.objects.all()
-    if request.method == 'POST':
-        form = JournalForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('journals')
-    context ['journal'] = journal    
-    context ['journal_form'] = form
-    return render(request, 'create_journal.html', context)
+# def create_journal_view(request):
+#     context = {}
+#     form = JournalForm()
+#     journal = Journal.objects.all()
+#     if request.method == 'POST':
+#         form = JournalForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('journals')
+#     context ['journal'] = journal    
+#     context ['journal_form'] = form
+#     return render(request, 'create_journal.html', context)
 
 def create_ledger_account_view(request):
     context = {}
@@ -67,3 +65,8 @@ def create_ledger_account_view(request):
     context ['ledger_account_form'] = form
     return render(request, 'create_ledger_account.html', context)
 
+def journal_entry_view(request, pk):
+    context = {}
+    journal_entry = JournalEntry.objects.get(post_reference=pk)
+    context ['journal_entry'] = journal_entry
+    return redirect(request,'journal_entry.html', context)

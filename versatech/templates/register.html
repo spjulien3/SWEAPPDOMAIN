@@ -78,7 +78,7 @@
 
         {% for error in field.errors %}
         <div style="color: red;">
-            <p>{{error}}</p>
+            <p>{{field.label}}{{error}}</p>
         </div>
         {% endfor %}
     </p>

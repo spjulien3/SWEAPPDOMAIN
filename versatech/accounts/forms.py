@@ -1,3 +1,4 @@
+from datetime import  datetime as dt
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.forms.widgets import DateInput, Select
@@ -8,9 +9,10 @@ class RegistrationForm(UserCreationForm):
 
     email = forms.EmailField(max_length=60, help_text="Required. Add a valid email address.")
     date_of_birth = forms.DateField(widget=DateInput(attrs={'type': 'date'}))
+    username = forms.CharField(widget=forms.HiddenInput, initial="123")
     class Meta:
         model = Account
-        fields = ("email","first_name", "last_name","date_of_birth","password1","password2")
+        fields = ("email", "username","first_name", "last_name","date_of_birth","password1","password2")
 
 class AccountAuthenticationForm(forms.ModelForm):
     username = forms.CharField(label="username")

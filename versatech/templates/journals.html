@@ -2,7 +2,7 @@
 
 
 {% block content %}
-
+{% load custom_tags %}
 
 
 
@@ -110,13 +110,8 @@
       <h1 class="h2">Journal</h1>
       <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-          <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-          <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+          <a href="{% url 'create_journal_entry' %}" class="btn btn-info" role="button">Add Journal Entry</a>
         </div>
-        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-          <span data-feather="calendar"></span>
-          This week
-        </button>
       </div>
     </div>
     <h2>Section title</h2>
@@ -170,13 +165,16 @@
                  {% if item.is_approved == True %}
                  <td> Approved </td>
                  {% endif %}
+                 {% if request.user|has_group:"is_manager" %}
+                 
                  {% if item.is_pending %}
                  <td>
-                   <button class="my-4 btn btn-success btn" type="">Approve</button>
-                   <button class="my-4 btn btn-danger btn" type="">Reject</button>
+                   <button class="my-4 btn btn-success btn">Approve</button>
+                   <button class="my-4 btn btn-danger btn">Reject</button>
                  </td>
                  {% else %}
                  <td>{{item.reason}}</td>
+                 {% endif %}
                  {% endif %}
                  
             </tr>

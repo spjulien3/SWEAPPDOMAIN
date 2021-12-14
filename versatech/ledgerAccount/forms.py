@@ -1,6 +1,6 @@
 from django import forms
 from django.forms.widgets import DateInput
-from .models import JournalEntry, Journal, ledgerAccount
+from .models import JournalEntry, ledgerAccount
 from django.forms import inlineformset_factory
 
 
@@ -8,13 +8,13 @@ class JournalEntryForm(forms.ModelForm):
     
     class Meta:
         model = JournalEntry
-        fields = ("account_name", "journal","date", "debit", "credit")
+        fields = ("account_name","date", "debit", "credit")
 
-class JournalForm(forms.ModelForm):
+# class JournalForm(forms.ModelForm):
     
-    class Meta:
-        model = Journal
-        fields = ("journal_name", "journal_balance" )
+#     class Meta:
+#         model = Journal
+#         fields = ("journal_name", "journal_balance" )
 
 class ledgerAccountForm(forms.ModelForm):
 

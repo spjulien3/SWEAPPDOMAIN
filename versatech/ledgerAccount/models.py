@@ -11,6 +11,7 @@ from djmoney.models.fields import MoneyField
 from datetime import datetime as dt
 from django.contrib.auth import get_user_model
 import djmoney.money
+
 import uuid
 
 NORMAL_SIDE_CHOICES = (
@@ -54,17 +55,11 @@ class ledgerAccount(models.Model):
     def __str__(self):
         return self.account_name
 
-class Journal(models.Model):
-     journal_name = models.CharField(max_length=50)
-     journal_balance = MoneyField(max_digits=14, decimal_places=2, default_currency='USD', blank=True, default=djmoney.money.Money(0,'USD'))
-
-    
-
 class JournalEntry(models.Model):
 
-    journal = models.ForeignKey(Journal, on_delete=CASCADE)
     date = models.DateField(default=dt.now)
     account_name = models.ForeignKey(ledgerAccount, on_delete=PROTECT)
+    date = models.DateField(default=dt.now)
     post_reference = models.AutoField(primary_key=True)
     normal_side = models.CharField(max_length=10, choices=NORMAL_SIDE_CHOICES)
     debit = MoneyField(max_digits=14, decimal_places=2, default_currency='USD', blank=True,default=djmoney.money.Money(0,'USD'))
@@ -82,7 +77,7 @@ def journal_entry_presave( sender, instance, **kwargs):
     max = djmoney.money.Money(0,'USD')
     print(balance)
     for index in query:
-        if max < index.balance:
+        if max < index.balance and index.account_name == instance.account_name:
             max = index.balance
             balance = index.balance
     if (instance.debit > djmoney.money.Money(0,'USD')):
@@ -92,8 +87,9 @@ def journal_entry_presave( sender, instance, **kwargs):
     
     if(instance.debit > instance.credit):
         instance.normal_side = "LEFT"
-    if(instance.credit > instance.debit):
+    if(instance.credit < instance.debit):
         instance.normal_side = "RIGHT"
+    instance.account_name.save()
 
 
 @receiver(pre_save, sender=ledgerAccount)

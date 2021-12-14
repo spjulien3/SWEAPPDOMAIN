@@ -1,10 +1,12 @@
 from django.db import models
+from django.contrib.auth.models import Group
 from django.dispatch import receiver
 from datetime import datetime as dt
 import datetime
 from django.db.models.signals import pre_save, post_save
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
+ROLE_GROUPS = ['is_manager', 'is_admin', 'is_accountant']
 
 class AccountManager(BaseUserManager):
     def create_user(self, email, username,date_of_birth, first_name, last_name, password):
@@ -61,7 +63,7 @@ class Account(AbstractBaseUser,PermissionsMixin):
     s_superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = [ 'date_of_birth', 'first_name', 'last_name']
+    REQUIRED_FIELDS = [ 'email','date_of_birth', 'first_name', 'last_name']
 
     objects = AccountManager()
 
@@ -80,3 +82,11 @@ class Account(AbstractBaseUser,PermissionsMixin):
 def account_pre_save(sender, instance, **kwargs):
     created_date =dt.today().strftime('%m%d')
     instance.username = instance.first_name[0] + instance.last_name + created_date
+    # instance.save()
+    # tries = 3
+    # for i in range(tries):
+    #     try:
+    #         if instance.is_admin:
+    #             print()     
+    #     except Group.Do
+    
